@@ -21,6 +21,7 @@ type Source struct {
 type Version struct {
 	ID       string `json:"id"`
 	Statuses string `json:"status"`
+	ETag     string `json:"etag"`
 }
 
 type CheckRequest struct {

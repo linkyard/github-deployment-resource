@@ -11,7 +11,7 @@ import (
 //go:generate counterfeiter -o fakes/fake_git_hub.go . GitHub
 
 type GitHub interface {
-	ListDeployments() ([]*github.Deployment, error)
+	ListDeployments(etag string) ([]*github.Deployment, string, error)
 	ListDeploymentStatuses(ID int) ([]*github.DeploymentStatus, error)
 	GetDeployment(ID int) (*github.Deployment, error)
 	CreateDeployment(request *github.DeploymentRequest) (*github.Deployment, error)
@@ -40,18 +40,24 @@ func NewGitHubClient(source Source) (*GitHubClient, error) {
 	}, nil
 }
 
-func (g *GitHubClient) ListDeployments() ([]*github.Deployment, error) {
-	deployments, res, err := g.client.Repositories.ListDeployments(g.user, g.repository, nil)
+func (g *GitHubClient) ListDeployments(etag string) ([]*github.Deployment, string, error) {
+	var opt *github.DeploymentsListOptions
+	if etag != "" {
+		opt = &github.DeploymentsListOptions{
+			ETag: etag,
+		}
+	}
+	deployments, res, err := g.client.Repositories.ListDeployments(g.user, g.repository, opt)
 	if err != nil {
-		return []*github.Deployment{}, err
+		return []*github.Deployment{}, "", err
 	}
 
 	err = res.Body.Close()
 	if err != nil {
-		return nil, err
+		return nil, "", err
 	}
 
-	return deployments, nil
+	return deployments, res.Header.Get("ETag"), nil
 }
 
 func (g *GitHubClient) GetDeployment(ID int) (*github.Deployment, error) {
