@@ -28,6 +28,10 @@ func (c *CheckCommand) Run(request CheckRequest) ([]Version, error) {
 		return []Version{}, err
 	}
 
+	if etag == request.Version.ETag {
+		return []Version{request.Version}, nil
+	}
+
 	var latestVersions []Version
 
 	for _, deployment := range deployments {
