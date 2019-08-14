@@ -4,12 +4,12 @@ package fakes
 import (
 	"sync"
 
-	"github.com/ahume/github-deployment-resource"
+	resource "github.com/ahume/github-deployment-resource"
 	"github.com/ahume/go-github/github"
 )
 
 type FakeGitHub struct {
-	ListDeploymentsStub        func() ([]*github.Deployment, error)
+	ListDeploymentsStub        func() ([]*github.Deployment, string, error)
 	listDeploymentsMutex       sync.RWMutex
 	listDeploymentsArgsForCall []struct{}
 	listDeploymentsReturns     struct {
@@ -77,7 +77,7 @@ type FakeGitHub struct {
 	invocationsMutex sync.RWMutex
 }
 
-func (fake *FakeGitHub) ListDeployments() ([]*github.Deployment, error) {
+func (fake *FakeGitHub) ListDeployments(etag string) ([]*github.Deployment, string, error) {
 	fake.listDeploymentsMutex.Lock()
 	ret, specificReturn := fake.listDeploymentsReturnsOnCall[len(fake.listDeploymentsArgsForCall)]
 	fake.listDeploymentsArgsForCall = append(fake.listDeploymentsArgsForCall, struct{}{})
@@ -87,9 +87,9 @@ func (fake *FakeGitHub) ListDeployments() ([]*github.Deployment, error) {
 		return fake.ListDeploymentsStub()
 	}
 	if specificReturn {
-		return ret.result1, ret.result2
+		return ret.result1, "", ret.result2
 	}
-	return fake.listDeploymentsReturns.result1, fake.listDeploymentsReturns.result2
+	return fake.listDeploymentsReturns.result1, "", fake.listDeploymentsReturns.result2
 }
 
 func (fake *FakeGitHub) ListDeploymentsCallCount() int {

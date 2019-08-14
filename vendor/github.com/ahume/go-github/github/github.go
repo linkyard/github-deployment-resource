@@ -399,6 +399,11 @@ func (c *Client) Do(req *http.Request, v interface{}) (*Response, error) {
 
 	response := newResponse(resp)
 
+	// Return early if 304 Not Modified received, let caller handle.
+	if response.StatusCode == http.StatusNotModified {
+		return response, err
+	}
+
 	c.rateMu.Lock()
 	c.rateLimits[rateLimitCategory] = response.Rate
 	c.mostRecent = rateLimitCategory

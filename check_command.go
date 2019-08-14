@@ -22,7 +22,7 @@ func NewCheckCommand(github GitHub, writer io.Writer) *CheckCommand {
 
 func (c *CheckCommand) Run(request CheckRequest) ([]Version, error) {
 	fmt.Fprintln(c.writer, "getting deployments list")
-	deployments, err := c.github.ListDeployments()
+	deployments, etag, err := c.github.ListDeployments(request.Version.ETag)
 
 	if err != nil {
 		return []Version{}, err
@@ -46,12 +46,11 @@ func (c *CheckCommand) Run(request CheckRequest) ([]Version, error) {
 
 		id := *deployment.ID
 		lastID, err := strconv.Atoi(request.Version.ID)
-		if err != nil {
-			latestVersions = append(latestVersions, Version{ID: strconv.Itoa(id)})
-		} else {
-			if id >= lastID {
-				latestVersions = append(latestVersions, Version{ID: strconv.Itoa(id)})
-			}
+		if err != nil || id >= lastID {
+			latestVersions = append(latestVersions, Version{
+				ID:   strconv.Itoa(id),
+				ETag: etag,
+			})
 		}
 	}
 
