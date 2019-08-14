@@ -57,6 +57,7 @@ type OutParams struct {
 	Task        string
 	State       string
 	Description string
+	AutoMerge   *bool `json:"auto_merge"`
 	Payload     map[string]interface{}
 	PayloadPath string `json:"payload_path"`
 

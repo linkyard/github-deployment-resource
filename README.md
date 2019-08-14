@@ -85,6 +85,8 @@ Create a new Deployment, or update a given Deployment with a new DeploymentStatu
 
 * `description`: *Optional.* The description of the deployment.
 
+* `auto_merge`: *Optional.* Whether to auto-merge the repository's default branch into the deployment ref. Defaults to true.
+
 * `payload`: *Optional.* Additional data about the deployment.
 
 * `payload_path`: *Optional.* Path to a file containing additional JSON data to add to the payload.

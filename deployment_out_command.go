@@ -66,6 +66,10 @@ func (c *DeploymentOutCommand) Run(sourceDir string, request OutRequest) (OutRes
 		newDeployment.Description = github.String(request.Params.Description)
 	}
 
+	if request.Params.AutoMerge != nil {
+		newDeployment.AutoMerge = request.Params.AutoMerge
+	}
+
 	fmt.Fprintln(c.writer, "creating deployment")
 	deployment, err := c.github.CreateDeployment(newDeployment)
 	if err != nil {
