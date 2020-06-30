@@ -3,9 +3,8 @@ package resource
 import (
 	"fmt"
 	"io"
+	"sort"
 	"strconv"
-
-	"github.com/bradfitz/slice"
 )
 
 type CheckCommand struct {
@@ -62,7 +61,7 @@ func (c *CheckCommand) Run(request CheckRequest) ([]Version, error) {
 		return []Version{}, nil
 	}
 
-	slice.Sort(latestVersions[:], func(i, j int) bool {
+	sort.Slice(latestVersions[:], func(i, j int) bool {
 		iID, _ := strconv.Atoi(latestVersions[i].ID)
 		jID, _ := strconv.Atoi(latestVersions[j].ID)
 		return iID < jID
