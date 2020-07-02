@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/shipt/go-github/v32/github"
+	"github.com/ahume/go-github/github"
 )
 
 type OutCommand struct {
@@ -24,14 +24,14 @@ func NewOutCommand(github GitHub, writer io.Writer) *OutCommand {
 }
 
 func (c *OutCommand) Run(sourceDir string, request OutRequest) (OutResponse, error) {
-	if request.Params.ID == nil {
+	if request.Params.ID == "" {
 		return OutResponse{}, errors.New("id is a required parameter")
 	}
-	if request.Params.State == nil {
+	if request.Params.State == "" {
 		return OutResponse{}, errors.New("state is a required parameter")
 	}
 
-	idInt, err := strconv.ParseInt(*request.Params.ID, 10, 64)
+	idInt, err := strconv.Atoi(request.Params.ID)
 	if err != nil {
 		return OutResponse{}, err
 	}
@@ -42,8 +42,8 @@ func (c *OutCommand) Run(sourceDir string, request OutRequest) (OutResponse, err
 	}
 
 	newStatus := &github.DeploymentStatusRequest{
-		State:       request.Params.State,
-		Description: request.Params.Description,
+		State:       github.String(request.Params.State),
+		Description: github.String(request.Params.Description),
 	}
 
 	fmt.Fprintln(c.writer, "creating deployment status")
@@ -65,7 +65,7 @@ func (c *OutCommand) Run(sourceDir string, request OutRequest) (OutResponse, err
 
 	return OutResponse{
 		Version: Version{
-			ID:       *request.Params.ID,
+			ID:       request.Params.ID,
 			Statuses: latestStatus,
 		},
 		Metadata: metadataFromDeployment(deployment, statuses),

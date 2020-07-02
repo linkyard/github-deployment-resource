@@ -8,7 +8,6 @@ import (
 	"strings"
 
 	"github.com/peterbourgon/mergemap"
-	"github.com/shipt/go-github/v32/github"
 )
 
 type Source struct {
@@ -51,17 +50,16 @@ type OutResponse struct {
 }
 
 type OutParams struct {
-	Type        *string `json:"type"`
-	ID          *string
-	Ref         *string
-	Environment *string
-	Task        *string
-	State       *string
-	Description *string
+	Type        string `json:"type"`
+	ID          string
+	Ref         string
+	Environment string
+	Task        string
+	State       string
+	Description string
 	AutoMerge   *bool `json:"auto_merge"`
-	Payload     *map[string]interface{}
-	PayloadPath *string `json:"payload_path"`
-	LogURL      *string
+	Payload     map[string]interface{}
+	PayloadPath string `json:"payload_path"`
 
 	RawID          json.RawMessage `json:"id"`
 	RawState       json.RawMessage `json:"state"`
@@ -69,9 +67,7 @@ type OutParams struct {
 	RawTask        json.RawMessage `json:"task"`
 	RawEnvironment json.RawMessage `json:"environment"`
 	RawDescription json.RawMessage `json:"description"`
-	RawAutoMerge   json.RawMessage `json:"auto_merge"`
 	RawPayload     json.RawMessage `json:"payload"`
-	RawLogURL      json.RawMessage `json:"log_url"`
 }
 
 // Used to avoid recursion in UnmarshalJSON below.
@@ -79,51 +75,47 @@ type outParams OutParams
 
 func (p *OutParams) UnmarshalJSON(b []byte) (err error) {
 	j := outParams{
-		Type: github.String("status"),
+		Type: "status",
 	}
 
 	if err = json.Unmarshal(b, &j); err == nil {
 		*p = OutParams(j)
 		if p.RawID != nil {
-			p.ID = github.String(getStringOrStringFromFile(p.RawID))
+			p.ID = getStringOrStringFromFile(p.RawID)
 		}
 
 		if p.RawState != nil {
-			p.State = github.String(getStringOrStringFromFile(p.RawState))
+			p.State = getStringOrStringFromFile(p.RawState)
 		}
 
 		if p.RawRef != nil {
-			p.Ref = github.String(getStringOrStringFromFile(p.RawRef))
+			p.Ref = getStringOrStringFromFile(p.RawRef)
 		}
 
 		if p.RawTask != nil {
-			p.Task = github.String(getStringOrStringFromFile(p.RawTask))
+			p.Task = getStringOrStringFromFile(p.RawTask)
 		}
 
 		if p.RawEnvironment != nil {
-			p.Environment = github.String(getStringOrStringFromFile(p.RawEnvironment))
+			p.Environment = getStringOrStringFromFile(p.RawEnvironment)
 		}
 
 		if p.RawDescription != nil {
-			p.Description = github.String(getStringOrStringFromFile(p.RawDescription))
-		}
-
-		if p.RawLogURL != nil {
-			p.LogURL = github.String(getStringOrStringFromFile(p.RawLogURL))
+			p.Description = getStringOrStringFromFile(p.RawDescription)
 		}
 
 		var payload map[string]interface{}
 		json.Unmarshal(p.RawPayload, &payload)
 
-		if p.PayloadPath != nil {
-			stringFromFile := fileContents(*p.PayloadPath)
+		if p.PayloadPath != "" {
+			stringFromFile := fileContents(p.PayloadPath)
 			var payloadFromFile map[string]interface{}
 			json.Unmarshal([]byte(stringFromFile), &payloadFromFile)
 
 			payload = mergemap.Merge(payloadFromFile, payload)
 		}
 
-		p.Payload = &payload
+		p.Payload = payload
 
 		return
 	}

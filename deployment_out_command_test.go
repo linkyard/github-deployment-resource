@@ -8,10 +8,10 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 
-	"github.com/shipt/go-github/v32/github"
+	"github.com/ahume/go-github/github"
 
-	resource "github.com/KevinSnyderCodes/github-deployment-resource"
-	"github.com/KevinSnyderCodes/github-deployment-resource/fakes"
+	"github.com/ahume/github-deployment-resource"
+	"github.com/ahume/github-deployment-resource/fakes"
 )
 
 var _ = Describe("Deployment Out Command", func() {
@@ -43,7 +43,7 @@ var _ = Describe("Deployment Out Command", func() {
 			Context("when all possible params are present", func() {
 				BeforeEach(func() {
 					githubClient.CreateDeploymentReturns(&github.Deployment{
-						ID:          github.Int64(1),
+						ID:          github.Int(1),
 						Ref:         github.String("ref"),
 						SHA:         github.String("1234"),
 						Task:        github.String("task"),
@@ -57,14 +57,13 @@ var _ = Describe("Deployment Out Command", func() {
 
 					request = resource.OutRequest{
 						Params: resource.OutParams{
-							Ref:         github.String("ref"),
-							Task:        github.String("task"),
-							Description: github.String("desc"),
-							Payload: &map[string]interface{}{
+							Ref:         "ref",
+							Task:        "task",
+							Description: "desc",
+							Payload: map[string]interface{}{
 								"one": "two",
 							},
-							Environment: github.String("env"),
-							AutoMerge:   github.Bool(false),
+							Environment: "env",
 						},
 					}
 				})
@@ -80,7 +79,6 @@ var _ = Describe("Deployment Out Command", func() {
 					Ω(deployment.Description).Should(Equal(github.String("desc")))
 					Ω(deployment.Payload).Should(Equal(github.String(`{"concourse_payload":{"atc_external_url":"","build_id":"","build_job_name":"","build_name":"","build_pipeline_name":"","build_team_name":"","build_url":"/teams//pipelines//jobs//builds/"},"one":"two"}`)))
 					Ω(deployment.Environment).Should(Equal(github.String("env")))
-					Ω(deployment.AutoMerge).Should(Equal(github.Bool(false)))
 				})
 
 				It("returns some metadata", func() {
@@ -115,7 +113,7 @@ var _ = Describe("Deployment Out Command", func() {
 			Context("when only required params are present", func() {
 				BeforeEach(func() {
 					githubClient.CreateDeploymentReturns(&github.Deployment{
-						ID:  github.Int64(1),
+						ID:  github.Int(1),
 						Ref: github.String("ref"),
 						SHA: github.String("1234"),
 						Creator: &github.User{
@@ -126,7 +124,7 @@ var _ = Describe("Deployment Out Command", func() {
 
 					request = resource.OutRequest{
 						Params: resource.OutParams{
-							Ref: github.String("ref"),
+							Ref: "ref",
 						},
 					}
 				})
