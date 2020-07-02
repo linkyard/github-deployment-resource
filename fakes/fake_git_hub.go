@@ -4,55 +4,26 @@ package fakes
 import (
 	"sync"
 
-	resource "github.com/KevinSnyderCodes/github-deployment-resource"
-	"github.com/shipt/go-github/v32/github"
+	resource "github.com/ahume/github-deployment-resource"
+	"github.com/ahume/go-github/github"
 )
 
 type FakeGitHub struct {
-	CreateDeploymentStub        func(*github.DeploymentRequest) (*github.Deployment, error)
-	createDeploymentMutex       sync.RWMutex
-	createDeploymentArgsForCall []struct {
-		arg1 *github.DeploymentRequest
-	}
-	createDeploymentReturns struct {
-		result1 *github.Deployment
+	ListDeploymentsStub        func() ([]*github.Deployment, string, error)
+	listDeploymentsMutex       sync.RWMutex
+	listDeploymentsArgsForCall []struct{}
+	listDeploymentsReturns     struct {
+		result1 []*github.Deployment
 		result2 error
 	}
-	createDeploymentReturnsOnCall map[int]struct {
-		result1 *github.Deployment
+	listDeploymentsReturnsOnCall map[int]struct {
+		result1 []*github.Deployment
 		result2 error
 	}
-	CreateDeploymentStatusStub        func(int64, *github.DeploymentStatusRequest) (*github.DeploymentStatus, error)
-	createDeploymentStatusMutex       sync.RWMutex
-	createDeploymentStatusArgsForCall []struct {
-		arg1 int64
-		arg2 *github.DeploymentStatusRequest
-	}
-	createDeploymentStatusReturns struct {
-		result1 *github.DeploymentStatus
-		result2 error
-	}
-	createDeploymentStatusReturnsOnCall map[int]struct {
-		result1 *github.DeploymentStatus
-		result2 error
-	}
-	GetDeploymentStub        func(int64) (*github.Deployment, error)
-	getDeploymentMutex       sync.RWMutex
-	getDeploymentArgsForCall []struct {
-		arg1 int64
-	}
-	getDeploymentReturns struct {
-		result1 *github.Deployment
-		result2 error
-	}
-	getDeploymentReturnsOnCall map[int]struct {
-		result1 *github.Deployment
-		result2 error
-	}
-	ListDeploymentStatusesStub        func(int64) ([]*github.DeploymentStatus, error)
+	ListDeploymentStatusesStub        func(ID int) ([]*github.DeploymentStatus, error)
 	listDeploymentStatusesMutex       sync.RWMutex
 	listDeploymentStatusesArgsForCall []struct {
-		arg1 int64
+		ID int
 	}
 	listDeploymentStatusesReturns struct {
 		result1 []*github.DeploymentStatus
@@ -62,231 +33,108 @@ type FakeGitHub struct {
 		result1 []*github.DeploymentStatus
 		result2 error
 	}
-	ListDeploymentsStub        func(string) ([]*github.Deployment, string, error)
-	listDeploymentsMutex       sync.RWMutex
-	listDeploymentsArgsForCall []struct {
-		arg1 string
+	GetDeploymentStub        func(ID int) (*github.Deployment, error)
+	getDeploymentMutex       sync.RWMutex
+	getDeploymentArgsForCall []struct {
+		ID int
 	}
-	listDeploymentsReturns struct {
-		result1 []*github.Deployment
-		result2 string
-		result3 error
+	getDeploymentReturns struct {
+		result1 *github.Deployment
+		result2 error
 	}
-	listDeploymentsReturnsOnCall map[int]struct {
-		result1 []*github.Deployment
-		result2 string
-		result3 error
+	getDeploymentReturnsOnCall map[int]struct {
+		result1 *github.Deployment
+		result2 error
+	}
+	CreateDeploymentStub        func(request *github.DeploymentRequest) (*github.Deployment, error)
+	createDeploymentMutex       sync.RWMutex
+	createDeploymentArgsForCall []struct {
+		request *github.DeploymentRequest
+	}
+	createDeploymentReturns struct {
+		result1 *github.Deployment
+		result2 error
+	}
+	createDeploymentReturnsOnCall map[int]struct {
+		result1 *github.Deployment
+		result2 error
+	}
+	CreateDeploymentStatusStub        func(ID int, request *github.DeploymentStatusRequest) (*github.DeploymentStatus, error)
+	createDeploymentStatusMutex       sync.RWMutex
+	createDeploymentStatusArgsForCall []struct {
+		ID      int
+		request *github.DeploymentStatusRequest
+	}
+	createDeploymentStatusReturns struct {
+		result1 *github.DeploymentStatus
+		result2 error
+	}
+	createDeploymentStatusReturnsOnCall map[int]struct {
+		result1 *github.DeploymentStatus
+		result2 error
 	}
 	invocations      map[string][][]interface{}
 	invocationsMutex sync.RWMutex
 }
 
-func (fake *FakeGitHub) CreateDeployment(arg1 *github.DeploymentRequest) (*github.Deployment, error) {
-	fake.createDeploymentMutex.Lock()
-	ret, specificReturn := fake.createDeploymentReturnsOnCall[len(fake.createDeploymentArgsForCall)]
-	fake.createDeploymentArgsForCall = append(fake.createDeploymentArgsForCall, struct {
-		arg1 *github.DeploymentRequest
-	}{arg1})
-	fake.recordInvocation("CreateDeployment", []interface{}{arg1})
-	fake.createDeploymentMutex.Unlock()
-	if fake.CreateDeploymentStub != nil {
-		return fake.CreateDeploymentStub(arg1)
+func (fake *FakeGitHub) ListDeployments(etag string) ([]*github.Deployment, string, error) {
+	fake.listDeploymentsMutex.Lock()
+	ret, specificReturn := fake.listDeploymentsReturnsOnCall[len(fake.listDeploymentsArgsForCall)]
+	fake.listDeploymentsArgsForCall = append(fake.listDeploymentsArgsForCall, struct{}{})
+	fake.recordInvocation("ListDeployments", []interface{}{})
+	fake.listDeploymentsMutex.Unlock()
+	if fake.ListDeploymentsStub != nil {
+		return fake.ListDeploymentsStub()
 	}
 	if specificReturn {
-		return ret.result1, ret.result2
+		return ret.result1, "", ret.result2
 	}
-	fakeReturns := fake.createDeploymentReturns
-	return fakeReturns.result1, fakeReturns.result2
+	return fake.listDeploymentsReturns.result1, "", fake.listDeploymentsReturns.result2
 }
 
-func (fake *FakeGitHub) CreateDeploymentCallCount() int {
-	fake.createDeploymentMutex.RLock()
-	defer fake.createDeploymentMutex.RUnlock()
-	return len(fake.createDeploymentArgsForCall)
+func (fake *FakeGitHub) ListDeploymentsCallCount() int {
+	fake.listDeploymentsMutex.RLock()
+	defer fake.listDeploymentsMutex.RUnlock()
+	return len(fake.listDeploymentsArgsForCall)
 }
 
-func (fake *FakeGitHub) CreateDeploymentCalls(stub func(*github.DeploymentRequest) (*github.Deployment, error)) {
-	fake.createDeploymentMutex.Lock()
-	defer fake.createDeploymentMutex.Unlock()
-	fake.CreateDeploymentStub = stub
-}
-
-func (fake *FakeGitHub) CreateDeploymentArgsForCall(i int) *github.DeploymentRequest {
-	fake.createDeploymentMutex.RLock()
-	defer fake.createDeploymentMutex.RUnlock()
-	argsForCall := fake.createDeploymentArgsForCall[i]
-	return argsForCall.arg1
-}
-
-func (fake *FakeGitHub) CreateDeploymentReturns(result1 *github.Deployment, result2 error) {
-	fake.createDeploymentMutex.Lock()
-	defer fake.createDeploymentMutex.Unlock()
-	fake.CreateDeploymentStub = nil
-	fake.createDeploymentReturns = struct {
-		result1 *github.Deployment
+func (fake *FakeGitHub) ListDeploymentsReturns(result1 []*github.Deployment, result2 error) {
+	fake.ListDeploymentsStub = nil
+	fake.listDeploymentsReturns = struct {
+		result1 []*github.Deployment
 		result2 error
 	}{result1, result2}
 }
 
-func (fake *FakeGitHub) CreateDeploymentReturnsOnCall(i int, result1 *github.Deployment, result2 error) {
-	fake.createDeploymentMutex.Lock()
-	defer fake.createDeploymentMutex.Unlock()
-	fake.CreateDeploymentStub = nil
-	if fake.createDeploymentReturnsOnCall == nil {
-		fake.createDeploymentReturnsOnCall = make(map[int]struct {
-			result1 *github.Deployment
+func (fake *FakeGitHub) ListDeploymentsReturnsOnCall(i int, result1 []*github.Deployment, result2 error) {
+	fake.ListDeploymentsStub = nil
+	if fake.listDeploymentsReturnsOnCall == nil {
+		fake.listDeploymentsReturnsOnCall = make(map[int]struct {
+			result1 []*github.Deployment
 			result2 error
 		})
 	}
-	fake.createDeploymentReturnsOnCall[i] = struct {
-		result1 *github.Deployment
+	fake.listDeploymentsReturnsOnCall[i] = struct {
+		result1 []*github.Deployment
 		result2 error
 	}{result1, result2}
 }
 
-func (fake *FakeGitHub) CreateDeploymentStatus(arg1 int64, arg2 *github.DeploymentStatusRequest) (*github.DeploymentStatus, error) {
-	fake.createDeploymentStatusMutex.Lock()
-	ret, specificReturn := fake.createDeploymentStatusReturnsOnCall[len(fake.createDeploymentStatusArgsForCall)]
-	fake.createDeploymentStatusArgsForCall = append(fake.createDeploymentStatusArgsForCall, struct {
-		arg1 int64
-		arg2 *github.DeploymentStatusRequest
-	}{arg1, arg2})
-	fake.recordInvocation("CreateDeploymentStatus", []interface{}{arg1, arg2})
-	fake.createDeploymentStatusMutex.Unlock()
-	if fake.CreateDeploymentStatusStub != nil {
-		return fake.CreateDeploymentStatusStub(arg1, arg2)
-	}
-	if specificReturn {
-		return ret.result1, ret.result2
-	}
-	fakeReturns := fake.createDeploymentStatusReturns
-	return fakeReturns.result1, fakeReturns.result2
-}
-
-func (fake *FakeGitHub) CreateDeploymentStatusCallCount() int {
-	fake.createDeploymentStatusMutex.RLock()
-	defer fake.createDeploymentStatusMutex.RUnlock()
-	return len(fake.createDeploymentStatusArgsForCall)
-}
-
-func (fake *FakeGitHub) CreateDeploymentStatusCalls(stub func(int64, *github.DeploymentStatusRequest) (*github.DeploymentStatus, error)) {
-	fake.createDeploymentStatusMutex.Lock()
-	defer fake.createDeploymentStatusMutex.Unlock()
-	fake.CreateDeploymentStatusStub = stub
-}
-
-func (fake *FakeGitHub) CreateDeploymentStatusArgsForCall(i int) (int64, *github.DeploymentStatusRequest) {
-	fake.createDeploymentStatusMutex.RLock()
-	defer fake.createDeploymentStatusMutex.RUnlock()
-	argsForCall := fake.createDeploymentStatusArgsForCall[i]
-	return argsForCall.arg1, argsForCall.arg2
-}
-
-func (fake *FakeGitHub) CreateDeploymentStatusReturns(result1 *github.DeploymentStatus, result2 error) {
-	fake.createDeploymentStatusMutex.Lock()
-	defer fake.createDeploymentStatusMutex.Unlock()
-	fake.CreateDeploymentStatusStub = nil
-	fake.createDeploymentStatusReturns = struct {
-		result1 *github.DeploymentStatus
-		result2 error
-	}{result1, result2}
-}
-
-func (fake *FakeGitHub) CreateDeploymentStatusReturnsOnCall(i int, result1 *github.DeploymentStatus, result2 error) {
-	fake.createDeploymentStatusMutex.Lock()
-	defer fake.createDeploymentStatusMutex.Unlock()
-	fake.CreateDeploymentStatusStub = nil
-	if fake.createDeploymentStatusReturnsOnCall == nil {
-		fake.createDeploymentStatusReturnsOnCall = make(map[int]struct {
-			result1 *github.DeploymentStatus
-			result2 error
-		})
-	}
-	fake.createDeploymentStatusReturnsOnCall[i] = struct {
-		result1 *github.DeploymentStatus
-		result2 error
-	}{result1, result2}
-}
-
-func (fake *FakeGitHub) GetDeployment(arg1 int64) (*github.Deployment, error) {
-	fake.getDeploymentMutex.Lock()
-	ret, specificReturn := fake.getDeploymentReturnsOnCall[len(fake.getDeploymentArgsForCall)]
-	fake.getDeploymentArgsForCall = append(fake.getDeploymentArgsForCall, struct {
-		arg1 int64
-	}{arg1})
-	fake.recordInvocation("GetDeployment", []interface{}{arg1})
-	fake.getDeploymentMutex.Unlock()
-	if fake.GetDeploymentStub != nil {
-		return fake.GetDeploymentStub(arg1)
-	}
-	if specificReturn {
-		return ret.result1, ret.result2
-	}
-	fakeReturns := fake.getDeploymentReturns
-	return fakeReturns.result1, fakeReturns.result2
-}
-
-func (fake *FakeGitHub) GetDeploymentCallCount() int {
-	fake.getDeploymentMutex.RLock()
-	defer fake.getDeploymentMutex.RUnlock()
-	return len(fake.getDeploymentArgsForCall)
-}
-
-func (fake *FakeGitHub) GetDeploymentCalls(stub func(int64) (*github.Deployment, error)) {
-	fake.getDeploymentMutex.Lock()
-	defer fake.getDeploymentMutex.Unlock()
-	fake.GetDeploymentStub = stub
-}
-
-func (fake *FakeGitHub) GetDeploymentArgsForCall(i int) int64 {
-	fake.getDeploymentMutex.RLock()
-	defer fake.getDeploymentMutex.RUnlock()
-	argsForCall := fake.getDeploymentArgsForCall[i]
-	return argsForCall.arg1
-}
-
-func (fake *FakeGitHub) GetDeploymentReturns(result1 *github.Deployment, result2 error) {
-	fake.getDeploymentMutex.Lock()
-	defer fake.getDeploymentMutex.Unlock()
-	fake.GetDeploymentStub = nil
-	fake.getDeploymentReturns = struct {
-		result1 *github.Deployment
-		result2 error
-	}{result1, result2}
-}
-
-func (fake *FakeGitHub) GetDeploymentReturnsOnCall(i int, result1 *github.Deployment, result2 error) {
-	fake.getDeploymentMutex.Lock()
-	defer fake.getDeploymentMutex.Unlock()
-	fake.GetDeploymentStub = nil
-	if fake.getDeploymentReturnsOnCall == nil {
-		fake.getDeploymentReturnsOnCall = make(map[int]struct {
-			result1 *github.Deployment
-			result2 error
-		})
-	}
-	fake.getDeploymentReturnsOnCall[i] = struct {
-		result1 *github.Deployment
-		result2 error
-	}{result1, result2}
-}
-
-func (fake *FakeGitHub) ListDeploymentStatuses(arg1 int64) ([]*github.DeploymentStatus, error) {
+func (fake *FakeGitHub) ListDeploymentStatuses(ID int) ([]*github.DeploymentStatus, error) {
 	fake.listDeploymentStatusesMutex.Lock()
 	ret, specificReturn := fake.listDeploymentStatusesReturnsOnCall[len(fake.listDeploymentStatusesArgsForCall)]
 	fake.listDeploymentStatusesArgsForCall = append(fake.listDeploymentStatusesArgsForCall, struct {
-		arg1 int64
-	}{arg1})
-	fake.recordInvocation("ListDeploymentStatuses", []interface{}{arg1})
+		ID int
+	}{ID})
+	fake.recordInvocation("ListDeploymentStatuses", []interface{}{ID})
 	fake.listDeploymentStatusesMutex.Unlock()
 	if fake.ListDeploymentStatusesStub != nil {
-		return fake.ListDeploymentStatusesStub(arg1)
+		return fake.ListDeploymentStatusesStub(ID)
 	}
 	if specificReturn {
 		return ret.result1, ret.result2
 	}
-	fakeReturns := fake.listDeploymentStatusesReturns
-	return fakeReturns.result1, fakeReturns.result2
+	return fake.listDeploymentStatusesReturns.result1, fake.listDeploymentStatusesReturns.result2
 }
 
 func (fake *FakeGitHub) ListDeploymentStatusesCallCount() int {
@@ -295,22 +143,13 @@ func (fake *FakeGitHub) ListDeploymentStatusesCallCount() int {
 	return len(fake.listDeploymentStatusesArgsForCall)
 }
 
-func (fake *FakeGitHub) ListDeploymentStatusesCalls(stub func(int64) ([]*github.DeploymentStatus, error)) {
-	fake.listDeploymentStatusesMutex.Lock()
-	defer fake.listDeploymentStatusesMutex.Unlock()
-	fake.ListDeploymentStatusesStub = stub
-}
-
-func (fake *FakeGitHub) ListDeploymentStatusesArgsForCall(i int) int64 {
+func (fake *FakeGitHub) ListDeploymentStatusesArgsForCall(i int) int {
 	fake.listDeploymentStatusesMutex.RLock()
 	defer fake.listDeploymentStatusesMutex.RUnlock()
-	argsForCall := fake.listDeploymentStatusesArgsForCall[i]
-	return argsForCall.arg1
+	return fake.listDeploymentStatusesArgsForCall[i].ID
 }
 
 func (fake *FakeGitHub) ListDeploymentStatusesReturns(result1 []*github.DeploymentStatus, result2 error) {
-	fake.listDeploymentStatusesMutex.Lock()
-	defer fake.listDeploymentStatusesMutex.Unlock()
 	fake.ListDeploymentStatusesStub = nil
 	fake.listDeploymentStatusesReturns = struct {
 		result1 []*github.DeploymentStatus
@@ -319,8 +158,6 @@ func (fake *FakeGitHub) ListDeploymentStatusesReturns(result1 []*github.Deployme
 }
 
 func (fake *FakeGitHub) ListDeploymentStatusesReturnsOnCall(i int, result1 []*github.DeploymentStatus, result2 error) {
-	fake.listDeploymentStatusesMutex.Lock()
-	defer fake.listDeploymentStatusesMutex.Unlock()
 	fake.ListDeploymentStatusesStub = nil
 	if fake.listDeploymentStatusesReturnsOnCall == nil {
 		fake.listDeploymentStatusesReturnsOnCall = make(map[int]struct {
@@ -334,85 +171,173 @@ func (fake *FakeGitHub) ListDeploymentStatusesReturnsOnCall(i int, result1 []*gi
 	}{result1, result2}
 }
 
-func (fake *FakeGitHub) ListDeployments(arg1 string) ([]*github.Deployment, string, error) {
-	fake.listDeploymentsMutex.Lock()
-	ret, specificReturn := fake.listDeploymentsReturnsOnCall[len(fake.listDeploymentsArgsForCall)]
-	fake.listDeploymentsArgsForCall = append(fake.listDeploymentsArgsForCall, struct {
-		arg1 string
-	}{arg1})
-	fake.recordInvocation("ListDeployments", []interface{}{arg1})
-	fake.listDeploymentsMutex.Unlock()
-	if fake.ListDeploymentsStub != nil {
-		return fake.ListDeploymentsStub(arg1)
+func (fake *FakeGitHub) GetDeployment(ID int) (*github.Deployment, error) {
+	fake.getDeploymentMutex.Lock()
+	ret, specificReturn := fake.getDeploymentReturnsOnCall[len(fake.getDeploymentArgsForCall)]
+	fake.getDeploymentArgsForCall = append(fake.getDeploymentArgsForCall, struct {
+		ID int
+	}{ID})
+	fake.recordInvocation("GetDeployment", []interface{}{ID})
+	fake.getDeploymentMutex.Unlock()
+	if fake.GetDeploymentStub != nil {
+		return fake.GetDeploymentStub(ID)
 	}
 	if specificReturn {
-		return ret.result1, ret.result2, ret.result3
+		return ret.result1, ret.result2
 	}
-	fakeReturns := fake.listDeploymentsReturns
-	return fakeReturns.result1, fakeReturns.result2, fakeReturns.result3
+	return fake.getDeploymentReturns.result1, fake.getDeploymentReturns.result2
 }
 
-func (fake *FakeGitHub) ListDeploymentsCallCount() int {
-	fake.listDeploymentsMutex.RLock()
-	defer fake.listDeploymentsMutex.RUnlock()
-	return len(fake.listDeploymentsArgsForCall)
+func (fake *FakeGitHub) GetDeploymentCallCount() int {
+	fake.getDeploymentMutex.RLock()
+	defer fake.getDeploymentMutex.RUnlock()
+	return len(fake.getDeploymentArgsForCall)
 }
 
-func (fake *FakeGitHub) ListDeploymentsCalls(stub func(string) ([]*github.Deployment, string, error)) {
-	fake.listDeploymentsMutex.Lock()
-	defer fake.listDeploymentsMutex.Unlock()
-	fake.ListDeploymentsStub = stub
+func (fake *FakeGitHub) GetDeploymentArgsForCall(i int) int {
+	fake.getDeploymentMutex.RLock()
+	defer fake.getDeploymentMutex.RUnlock()
+	return fake.getDeploymentArgsForCall[i].ID
 }
 
-func (fake *FakeGitHub) ListDeploymentsArgsForCall(i int) string {
-	fake.listDeploymentsMutex.RLock()
-	defer fake.listDeploymentsMutex.RUnlock()
-	argsForCall := fake.listDeploymentsArgsForCall[i]
-	return argsForCall.arg1
+func (fake *FakeGitHub) GetDeploymentReturns(result1 *github.Deployment, result2 error) {
+	fake.GetDeploymentStub = nil
+	fake.getDeploymentReturns = struct {
+		result1 *github.Deployment
+		result2 error
+	}{result1, result2}
 }
 
-func (fake *FakeGitHub) ListDeploymentsReturns(result1 []*github.Deployment, result2 string, result3 error) {
-	fake.listDeploymentsMutex.Lock()
-	defer fake.listDeploymentsMutex.Unlock()
-	fake.ListDeploymentsStub = nil
-	fake.listDeploymentsReturns = struct {
-		result1 []*github.Deployment
-		result2 string
-		result3 error
-	}{result1, result2, result3}
-}
-
-func (fake *FakeGitHub) ListDeploymentsReturnsOnCall(i int, result1 []*github.Deployment, result2 string, result3 error) {
-	fake.listDeploymentsMutex.Lock()
-	defer fake.listDeploymentsMutex.Unlock()
-	fake.ListDeploymentsStub = nil
-	if fake.listDeploymentsReturnsOnCall == nil {
-		fake.listDeploymentsReturnsOnCall = make(map[int]struct {
-			result1 []*github.Deployment
-			result2 string
-			result3 error
+func (fake *FakeGitHub) GetDeploymentReturnsOnCall(i int, result1 *github.Deployment, result2 error) {
+	fake.GetDeploymentStub = nil
+	if fake.getDeploymentReturnsOnCall == nil {
+		fake.getDeploymentReturnsOnCall = make(map[int]struct {
+			result1 *github.Deployment
+			result2 error
 		})
 	}
-	fake.listDeploymentsReturnsOnCall[i] = struct {
-		result1 []*github.Deployment
-		result2 string
-		result3 error
-	}{result1, result2, result3}
+	fake.getDeploymentReturnsOnCall[i] = struct {
+		result1 *github.Deployment
+		result2 error
+	}{result1, result2}
+}
+
+func (fake *FakeGitHub) CreateDeployment(request *github.DeploymentRequest) (*github.Deployment, error) {
+	fake.createDeploymentMutex.Lock()
+	ret, specificReturn := fake.createDeploymentReturnsOnCall[len(fake.createDeploymentArgsForCall)]
+	fake.createDeploymentArgsForCall = append(fake.createDeploymentArgsForCall, struct {
+		request *github.DeploymentRequest
+	}{request})
+	fake.recordInvocation("CreateDeployment", []interface{}{request})
+	fake.createDeploymentMutex.Unlock()
+	if fake.CreateDeploymentStub != nil {
+		return fake.CreateDeploymentStub(request)
+	}
+	if specificReturn {
+		return ret.result1, ret.result2
+	}
+	return fake.createDeploymentReturns.result1, fake.createDeploymentReturns.result2
+}
+
+func (fake *FakeGitHub) CreateDeploymentCallCount() int {
+	fake.createDeploymentMutex.RLock()
+	defer fake.createDeploymentMutex.RUnlock()
+	return len(fake.createDeploymentArgsForCall)
+}
+
+func (fake *FakeGitHub) CreateDeploymentArgsForCall(i int) *github.DeploymentRequest {
+	fake.createDeploymentMutex.RLock()
+	defer fake.createDeploymentMutex.RUnlock()
+	return fake.createDeploymentArgsForCall[i].request
+}
+
+func (fake *FakeGitHub) CreateDeploymentReturns(result1 *github.Deployment, result2 error) {
+	fake.CreateDeploymentStub = nil
+	fake.createDeploymentReturns = struct {
+		result1 *github.Deployment
+		result2 error
+	}{result1, result2}
+}
+
+func (fake *FakeGitHub) CreateDeploymentReturnsOnCall(i int, result1 *github.Deployment, result2 error) {
+	fake.CreateDeploymentStub = nil
+	if fake.createDeploymentReturnsOnCall == nil {
+		fake.createDeploymentReturnsOnCall = make(map[int]struct {
+			result1 *github.Deployment
+			result2 error
+		})
+	}
+	fake.createDeploymentReturnsOnCall[i] = struct {
+		result1 *github.Deployment
+		result2 error
+	}{result1, result2}
+}
+
+func (fake *FakeGitHub) CreateDeploymentStatus(ID int, request *github.DeploymentStatusRequest) (*github.DeploymentStatus, error) {
+	fake.createDeploymentStatusMutex.Lock()
+	ret, specificReturn := fake.createDeploymentStatusReturnsOnCall[len(fake.createDeploymentStatusArgsForCall)]
+	fake.createDeploymentStatusArgsForCall = append(fake.createDeploymentStatusArgsForCall, struct {
+		ID      int
+		request *github.DeploymentStatusRequest
+	}{ID, request})
+	fake.recordInvocation("CreateDeploymentStatus", []interface{}{ID, request})
+	fake.createDeploymentStatusMutex.Unlock()
+	if fake.CreateDeploymentStatusStub != nil {
+		return fake.CreateDeploymentStatusStub(ID, request)
+	}
+	if specificReturn {
+		return ret.result1, ret.result2
+	}
+	return fake.createDeploymentStatusReturns.result1, fake.createDeploymentStatusReturns.result2
+}
+
+func (fake *FakeGitHub) CreateDeploymentStatusCallCount() int {
+	fake.createDeploymentStatusMutex.RLock()
+	defer fake.createDeploymentStatusMutex.RUnlock()
+	return len(fake.createDeploymentStatusArgsForCall)
+}
+
+func (fake *FakeGitHub) CreateDeploymentStatusArgsForCall(i int) (int, *github.DeploymentStatusRequest) {
+	fake.createDeploymentStatusMutex.RLock()
+	defer fake.createDeploymentStatusMutex.RUnlock()
+	return fake.createDeploymentStatusArgsForCall[i].ID, fake.createDeploymentStatusArgsForCall[i].request
+}
+
+func (fake *FakeGitHub) CreateDeploymentStatusReturns(result1 *github.DeploymentStatus, result2 error) {
+	fake.CreateDeploymentStatusStub = nil
+	fake.createDeploymentStatusReturns = struct {
+		result1 *github.DeploymentStatus
+		result2 error
+	}{result1, result2}
+}
+
+func (fake *FakeGitHub) CreateDeploymentStatusReturnsOnCall(i int, result1 *github.DeploymentStatus, result2 error) {
+	fake.CreateDeploymentStatusStub = nil
+	if fake.createDeploymentStatusReturnsOnCall == nil {
+		fake.createDeploymentStatusReturnsOnCall = make(map[int]struct {
+			result1 *github.DeploymentStatus
+			result2 error
+		})
+	}
+	fake.createDeploymentStatusReturnsOnCall[i] = struct {
+		result1 *github.DeploymentStatus
+		result2 error
+	}{result1, result2}
 }
 
 func (fake *FakeGitHub) Invocations() map[string][][]interface{} {
 	fake.invocationsMutex.RLock()
 	defer fake.invocationsMutex.RUnlock()
+	fake.listDeploymentsMutex.RLock()
+	defer fake.listDeploymentsMutex.RUnlock()
+	fake.listDeploymentStatusesMutex.RLock()
+	defer fake.listDeploymentStatusesMutex.RUnlock()
+	fake.getDeploymentMutex.RLock()
+	defer fake.getDeploymentMutex.RUnlock()
 	fake.createDeploymentMutex.RLock()
 	defer fake.createDeploymentMutex.RUnlock()
 	fake.createDeploymentStatusMutex.RLock()
 	defer fake.createDeploymentStatusMutex.RUnlock()
-	fake.getDeploymentMutex.RLock()
-	defer fake.getDeploymentMutex.RUnlock()
-	fake.listDeploymentStatusesMutex.RLock()
-	defer fake.listDeploymentStatusesMutex.RUnlock()
-	fake.listDeploymentsMutex.RLock()
-	defer fake.listDeploymentsMutex.RUnlock()
 	copiedInvocations := map[string][][]interface{}{}
 	for key, value := range fake.invocations {
 		copiedInvocations[key] = value

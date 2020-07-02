@@ -21,20 +21,12 @@ see the [API documentation](https://developer.github.com/v3/repos/deployments/).
 ### Example
 
 ``` yaml
-resource_types:
-  - name: github-deployment
-    type: docker-image
-    source:
-      repository: andyhume/github-deployment-resource
-      tag: "v0.8.0"
-      
-resources:
-  - name: deployment
-    type: github-deployment
-    source:
-      user: BrandwatchLtd
-      repository: analytics
-      access_token: abcdef1234567890
+- name: deployment
+  type: github-deployment
+  source:
+    user: BrandwatchLtd
+    repository: analytics
+    access_token: abcdef1234567890
 ```
 
 ``` yaml
