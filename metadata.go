@@ -3,7 +3,7 @@ package resource
 import (
 	"strconv"
 
-	"github.com/google/go-github/v28/github"
+	"github.com/shipt/go-github/v32/github"
 )
 
 func metadataFromDeployment(deployment *github.Deployment, statuses []*github.DeploymentStatus) []MetadataPair {

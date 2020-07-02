@@ -1,9 +1,9 @@
 package resource_test
 
 import (
-	"github.com/google/go-github/v28/github"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+	"github.com/shipt/go-github/v32/github"
 
 	"testing"
 )

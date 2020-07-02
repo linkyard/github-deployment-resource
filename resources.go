@@ -7,8 +7,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/google/go-github/v28/github"
 	"github.com/peterbourgon/mergemap"
+	"github.com/shipt/go-github/v32/github"
 )
 
 type Source struct {
@@ -51,16 +51,16 @@ type OutResponse struct {
 }
 
 type OutParams struct {
-	Type        string `json:"type"`
-	ID          string
-	Ref         string
-	Environment string
-	Task        string
-	State       string
-	Description string
+	Type        *string `json:"type"`
+	ID          *string
+	Ref         *string
+	Environment *string
+	Task        *string
+	State       *string
+	Description *string
 	AutoMerge   *bool `json:"auto_merge"`
-	Payload     map[string]interface{}
-	PayloadPath string `json:"payload_path"`
+	Payload     *map[string]interface{}
+	PayloadPath *string `json:"payload_path"`
 
 	RawID          json.RawMessage `json:"id"`
 	RawState       json.RawMessage `json:"state"`

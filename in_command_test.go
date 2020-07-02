@@ -11,10 +11,10 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 
-	"github.com/google/go-github/v28/github"
+	"github.com/shipt/go-github/v32/github"
 
-	resource "github.com/ahume/github-deployment-resource"
-	"github.com/ahume/github-deployment-resource/fakes"
+	resource "github.com/KevinSnyderCodes/github-deployment-resource"
+	"github.com/KevinSnyderCodes/github-deployment-resource/fakes"
 )
 
 var _ = Describe("In Command", func() {

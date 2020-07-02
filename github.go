@@ -8,15 +8,15 @@ import (
 
 	"golang.org/x/oauth2"
 
-	"github.com/google/go-github/v28/github"
+	"github.com/shipt/go-github/v32/github"
 )
 
 //go:generate counterfeiter -o fakes/fake_git_hub.go . GitHub
 
 type GitHub interface {
 	ListDeployments(etag string) ([]*github.Deployment, string, error)
-	ListDeploymentStatuses(ID int) ([]*github.DeploymentStatus, error)
-	GetDeployment(ID int) (*github.Deployment, error)
+	ListDeploymentStatuses(ID int64) ([]*github.DeploymentStatus, error)
+	GetDeployment(ID int64) (*github.Deployment, error)
 	CreateDeployment(request *github.DeploymentRequest) (*github.Deployment, error)
 	CreateDeploymentStatus(ID int64, request *github.DeploymentStatusRequest) (*github.DeploymentStatus, error)
 }
@@ -51,14 +51,19 @@ func NewGitHubClient(source Source) (*GitHubClient, error) {
 }
 
 func (g *GitHubClient) ListDeployments(etag string) ([]*github.Deployment, string, error) {
-	var opt *github.DeploymentsListOptions
+	ctx := context.Background()
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
+	var opts *github.DeploymentsListOptions
 	if etag != "" {
-		opt = &github.DeploymentsListOptions{
+		opts = &github.DeploymentsListOptions{
 			ETag: etag,
 		}
 	}
-	deployments, res, err := g.client.Repositories.ListDeployments(g.user, g.repository, opt)
-	if err != nil {
+	deployments, res, err := g.client.Repositories.ListDeployments(ctx, g.user, g.repository, opts)
+
+	if err != nil && res.StatusCode != http.StatusNotModified { // An error + a Not Modified status is actually a successful operation
 		return []*github.Deployment{}, "", err
 	}
 
@@ -73,6 +78,7 @@ func (g *GitHubClient) ListDeployments(etag string) ([]*github.Deployment, strin
 func (g *GitHubClient) GetDeployment(ID int64) (*github.Deployment, error) {
 	ctx := context.Background()
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+
 	defer cancel()
 
 	deployment, res, err := g.client.Repositories.GetDeployment(ctx, g.user, g.repository, ID)

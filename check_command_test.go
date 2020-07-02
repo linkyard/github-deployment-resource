@@ -6,10 +6,10 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 
-	"github.com/google/go-github/v28/github"
+	"github.com/shipt/go-github/v32/github"
 
-	resource "github.com/ahume/github-deployment-resource"
-	"github.com/ahume/github-deployment-resource/fakes"
+	resource "github.com/KevinSnyderCodes/github-deployment-resource"
+	"github.com/KevinSnyderCodes/github-deployment-resource/fakes"
 )
 
 var _ = Describe("Check Command", func() {
@@ -33,7 +33,7 @@ var _ = Describe("Check Command", func() {
 	})
 
 	JustBeforeEach(func() {
-		githubClient.ListDeploymentsReturns(returnedDeployments, nil)
+		githubClient.ListDeploymentsReturns(returnedDeployments, "", nil)
 		githubClient.ListDeploymentStatusesReturns(returnedDeploymentStatuses, nil)
 	})
 

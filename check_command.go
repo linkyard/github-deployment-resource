@@ -27,7 +27,7 @@ func (c *CheckCommand) Run(request CheckRequest) ([]Version, error) {
 		return []Version{}, err
 	}
 
-	if etag == request.Version.ETag {
+	if etag != "" && etag == request.Version.ETag {
 		return []Version{request.Version}, nil
 	}
 
@@ -48,10 +48,10 @@ func (c *CheckCommand) Run(request CheckRequest) ([]Version, error) {
 		}
 
 		id := *deployment.ID
-		lastID, err := strconv.Atoi(request.Version.ID)
+		lastID, err := strconv.ParseInt(request.Version.ID, 10, 64)
 		if err != nil || id >= lastID {
 			latestVersions = append(latestVersions, Version{
-				ID:   strconv.Itoa(id),
+				ID:   strconv.FormatInt(id, 10),
 				ETag: etag,
 			})
 		}
