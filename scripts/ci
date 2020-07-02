@@ -8,9 +8,9 @@ set -eu
 
 BUILD_DIR=$PWD/built-resource
 
-cd $GOPATH/src/github.com/ahume/github-deployment-resource
+cd $GOPATH/src/github.com/KevinSnyderCodes/github-deployment-resource
 
-go install github.com/ahume/github-deployment-resource/vendor/github.com/onsi/ginkgo/ginkgo
+go install github.com/KevinSnyderCodes/github-deployment-resource/vendor/github.com/onsi/ginkgo/ginkgo
 
 CGO_ENABLED=1 ginkgo -race -r -p "$@"
 

@@ -6,10 +6,10 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 
-	"github.com/ahume/go-github/github"
+	"github.com/shipt/go-github/v32/github"
 
-	"github.com/ahume/github-deployment-resource"
-	"github.com/ahume/github-deployment-resource/fakes"
+	resource "github.com/KevinSnyderCodes/github-deployment-resource"
+	"github.com/KevinSnyderCodes/github-deployment-resource/fakes"
 )
 
 var _ = Describe("Check Command", func() {
@@ -33,7 +33,7 @@ var _ = Describe("Check Command", func() {
 	})
 
 	JustBeforeEach(func() {
-		githubClient.ListDeploymentsReturns(returnedDeployments, nil)
+		githubClient.ListDeploymentsReturns(returnedDeployments, "", nil)
 		githubClient.ListDeploymentStatusesReturns(returnedDeploymentStatuses, nil)
 	})
 
@@ -67,6 +67,25 @@ var _ = Describe("Check Command", func() {
 				Ω(versions[0]).Should(Equal(resource.Version{
 					ID: "3",
 				}))
+			})
+
+			Context("when an ETag is returned by the ListDeployments call", func() {
+				const eTag = `W/"312312321"`
+				JustBeforeEach(func() {
+					githubClient.ListDeploymentsReturns(returnedDeployments, eTag, nil)
+					githubClient.ListDeploymentStatusesReturns(returnedDeploymentStatuses, nil)
+				})
+
+				It("is persisted in the version", func() {
+					versions, err := command.Run(resource.CheckRequest{})
+					Ω(err).ShouldNot(HaveOccurred())
+
+					Ω(versions).Should(HaveLen(1))
+					Ω(versions[0]).Should(Equal(resource.Version{
+						ID:   "3",
+						ETag: eTag,
+					}))
+				})
 			})
 		})
 	})
