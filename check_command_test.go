@@ -68,6 +68,25 @@ var _ = Describe("Check Command", func() {
 					ID: "3",
 				}))
 			})
+
+			Context("when an ETag is returned by the ListDeployments call", func() {
+				const eTag = `W/"312312321"`
+				JustBeforeEach(func() {
+					githubClient.ListDeploymentsReturns(returnedDeployments, eTag, nil)
+					githubClient.ListDeploymentStatusesReturns(returnedDeploymentStatuses, nil)
+				})
+
+				It("is persisted in the version", func() {
+					versions, err := command.Run(resource.CheckRequest{})
+					Ω(err).ShouldNot(HaveOccurred())
+
+					Ω(versions).Should(HaveLen(1))
+					Ω(versions[0]).Should(Equal(resource.Version{
+						ID:   "3",
+						ETag: eTag,
+					}))
+				})
+			})
 		})
 	})
 

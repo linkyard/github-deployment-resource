@@ -61,6 +61,7 @@ type OutParams struct {
 	AutoMerge   *bool `json:"auto_merge"`
 	Payload     *map[string]interface{}
 	PayloadPath *string `json:"payload_path"`
+	LogURL      *string
 
 	RawID          json.RawMessage `json:"id"`
 	RawState       json.RawMessage `json:"state"`
@@ -70,6 +71,7 @@ type OutParams struct {
 	RawDescription json.RawMessage `json:"description"`
 	RawAutoMerge   json.RawMessage `json:"auto_merge"`
 	RawPayload     json.RawMessage `json:"payload"`
+	RawLogURL      json.RawMessage `json:"log_url"`
 }
 
 // Used to avoid recursion in UnmarshalJSON below.
@@ -104,6 +106,10 @@ func (p *OutParams) UnmarshalJSON(b []byte) (err error) {
 
 		if p.RawDescription != nil {
 			p.Description = github.String(getStringOrStringFromFile(p.RawDescription))
+		}
+
+		if p.RawLogURL != nil {
+			p.LogURL = github.String(getStringOrStringFromFile(p.RawLogURL))
 		}
 
 		var payload map[string]interface{}

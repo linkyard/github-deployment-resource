@@ -61,7 +61,8 @@ var _ = Describe("Resources", func() {
 					"state": "state-string",
 					"task": "task-string",
 					"environment": "environment-string",
-					"description": "description-string"
+					"description": "description-string",
+					"log_url": "https://foo.com"
 					}
 				}`))
 			err := json.NewDecoder(r).Decode(&p)
@@ -73,6 +74,7 @@ var _ = Describe("Resources", func() {
 			Ω(*p.Params.Task).Should(Equal("task-string"))
 			Ω(*p.Params.Environment).Should(Equal("environment-string"))
 			Ω(*p.Params.Description).Should(Equal("description-string"))
+			Ω(*p.Params.LogURL).Should(Equal("https://foo.com"))
 		})
 
 		It("gets values from files", func() {
