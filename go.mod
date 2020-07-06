@@ -3,7 +3,6 @@ module github.com/KevinSnyderCodes/github-deployment-resource
 go 1.13
 
 require (
-	github.com/ahume/github-deployment-resource v0.9.2 // indirect
 	github.com/mitchellh/colorstring v0.0.0-20190213212951-d06e56a500db
 	github.com/onsi/ginkgo v1.10.1
 	github.com/onsi/gomega v1.7.0
