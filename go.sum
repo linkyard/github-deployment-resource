@@ -19,6 +19,8 @@ github.com/peterbourgon/mergemap v0.0.0-20130613134717-e21c03b7a721 h1:ArxMo6jAO
 github.com/peterbourgon/mergemap v0.0.0-20130613134717-e21c03b7a721/go.mod h1:jQyRpOpE/KbvPc0VKXjAqctYglwUO5W6zAcGcFfbvlo=
 github.com/shipt/go-github/v32 v32.0.2 h1:aUHcAuUphztl+iTCHKrk4VJ/pPqQ9vPLIDCGeaBYx3I=
 github.com/shipt/go-github/v32 v32.0.2/go.mod h1:Tz0gmGVgQLq/LyLggJ1/eiS57YXzum7lFMbYbTjCbiU=
+github.com/shipt/go-github/v32 v32.0.3 h1:Uj5sCMMGOsZtbURaYADwXPh2/hx7SWmq7yzawgyayos=
+github.com/shipt/go-github/v32 v32.0.3/go.mod h1:Tz0gmGVgQLq/LyLggJ1/eiS57YXzum7lFMbYbTjCbiU=
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2 h1:VklqNMn3ovrHsnt90PveolxSbWFaJdECFbxSq0Mqo2M=
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=
 golang.org/x/net v0.0.0-20180724234803-3673e40ba225/go.mod h1:mL1N/T3taQHkDXs73rZJwtUhF3w3ftmwwsq0BUmARs4=
