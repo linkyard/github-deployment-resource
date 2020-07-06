@@ -67,8 +67,9 @@ var _ = Describe("Status Out Command", func() {
 			BeforeEach(func() {
 				request = resource.OutRequest{
 					Params: resource.OutParams{
-						ID:    github.String("1234"),
-						State: github.String("success"),
+						ID:     github.String("1234"),
+						State:  github.String("success"),
+						LogURL: github.String("http://foo.com"),
 					},
 				}
 			})
@@ -82,6 +83,7 @@ var _ = Describe("Status Out Command", func() {
 
 				Ω(id).Should(Equal(*github.Int64(1234)))
 				Ω(status.State).Should(Equal(github.String("success")))
+				Ω(status.LogURL).Should(Equal(github.String("http://foo.com")))
 			})
 
 			It("returns some metadata", func() {
