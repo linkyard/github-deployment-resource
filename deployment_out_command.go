@@ -46,8 +46,9 @@ func (c *DeploymentOutCommand) Run(sourceDir string, request OutRequest) (OutRes
 		"atc_external_url": os.Getenv("ATC_EXTERNAL_URL"),
 	}
 
-	if request.Params.Payload != nil {
-		request.Params.Payload["concourse_payload"] = concoursePayload
+	if request.Params.Payload != nil && *request.Params.Payload != nil {
+		payload := *request.Params.Payload
+		payload["concourse_payload"] = concoursePayload
 	} else {
 		request.Params.Payload = map[string]interface{}{
 			"concourse_payload": concoursePayload,

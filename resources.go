@@ -107,8 +107,8 @@ func (p *OutParams) UnmarshalJSON(b []byte) (err error) {
 		var payload map[string]interface{}
 		json.Unmarshal(p.RawPayload, &payload)
 
-		if p.PayloadPath != "" {
-			stringFromFile := fileContents(p.PayloadPath)
+		if p.PayloadPath != nil && *p.PayloadPath != "" {
+			stringFromFile := fileContents(*p.PayloadPath)
 			var payloadFromFile map[string]interface{}
 			json.Unmarshal([]byte(stringFromFile), &payloadFromFile)
 

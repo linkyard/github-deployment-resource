@@ -17,7 +17,7 @@ func metadataFromDeployment(deployment *github.Deployment, statuses []*github.De
 		metadata = append(metadata, nameMeta)
 	}
 
-	if deployment.Ref != nil {
+	if deployment.Ref != nil && *deployment.Ref != "" {
 		refMeta := MetadataPair{
 			Name:  "ref",
 			Value: *deployment.Ref,
@@ -25,7 +25,7 @@ func metadataFromDeployment(deployment *github.Deployment, statuses []*github.De
 		metadata = append(metadata, refMeta)
 	}
 
-	if deployment.SHA != nil {
+	if deployment.SHA != nil && *deployment.SHA != "" {
 		shaMeta := MetadataPair{
 			Name:  "sha",
 			Value: *deployment.SHA,
@@ -33,7 +33,7 @@ func metadataFromDeployment(deployment *github.Deployment, statuses []*github.De
 		metadata = append(metadata, shaMeta)
 	}
 
-	if deployment.Task != nil {
+	if deployment.Task != nil && *deployment.Task != "" {
 		taskMeta := MetadataPair{
 			Name:  "task",
 			Value: *deployment.Task,
@@ -41,7 +41,7 @@ func metadataFromDeployment(deployment *github.Deployment, statuses []*github.De
 		metadata = append(metadata, taskMeta)
 	}
 
-	if deployment.Environment != nil {
+	if deployment.Environment != nil && *deployment.Environment != "" {
 		envMeta := MetadataPair{
 			Name:  "environment",
 			Value: *deployment.Environment,
@@ -49,7 +49,7 @@ func metadataFromDeployment(deployment *github.Deployment, statuses []*github.De
 		metadata = append(metadata, envMeta)
 	}
 
-	if deployment.Description != nil {
+	if deployment.Description != nil && *deployment.Description != "" {
 		descMeta := MetadataPair{
 			Name:  "description",
 			Value: *deployment.Description,
@@ -83,7 +83,7 @@ func metadataFromDeployment(deployment *github.Deployment, statuses []*github.De
 			metadata = append(metadata, nameMeta)
 		}
 
-		if statuses[0].State != nil {
+		if statuses[0].State != nil && *statuses[0].State != "" {
 			envMeta := MetadataPair{
 				Name:  "status",
 				Value: *statuses[0].State,
