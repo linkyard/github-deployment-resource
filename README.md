@@ -68,7 +68,6 @@ Fetches the latest deployment and creates the following files:
 * `description` containing the description of the deployment
 * `deploymentJSON` containing the full JSON of the deployment as received from the API.
 
-
 ### `out`: Create a Deployment or DeploymentStatus
 
 Create a new Deployment, or update a given Deployment with a new DeploymentStatus
