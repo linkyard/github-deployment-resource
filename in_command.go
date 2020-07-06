@@ -29,7 +29,7 @@ func (c *InCommand) Run(destDir string, request InRequest) (InResponse, error) {
 		return InResponse{}, err
 	}
 
-	id, _ := strconv.Atoi(request.Version.ID)
+	id, _ := strconv.ParseInt(request.Version.ID, 10, 64)
 	fmt.Fprintln(c.writer, "getting deployment")
 	deployment, err := c.github.GetDeployment(id)
 	if err != nil {
@@ -58,7 +58,7 @@ func (c *InCommand) Run(destDir string, request InRequest) (InResponse, error) {
 		return InResponse{}, err
 	}
 
-	if deployment.Task != nil {
+	if deployment.Task != nil && *deployment.Task != "" {
 		taskPath := filepath.Join(destDir, "task")
 		err = ioutil.WriteFile(taskPath, []byte(*deployment.Task), 0644)
 		if err != nil {
@@ -66,7 +66,7 @@ func (c *InCommand) Run(destDir string, request InRequest) (InResponse, error) {
 		}
 	}
 
-	if deployment.Environment != nil {
+	if deployment.Environment != nil && *deployment.Environment != "" {
 		envPath := filepath.Join(destDir, "environment")
 		err = ioutil.WriteFile(envPath, []byte(*deployment.Environment), 0644)
 		if err != nil {
@@ -74,7 +74,7 @@ func (c *InCommand) Run(destDir string, request InRequest) (InResponse, error) {
 		}
 	}
 
-	if deployment.Description != nil {
+	if deployment.Description != nil && *deployment.Description != "" {
 		descPath := filepath.Join(destDir, "description")
 		err = ioutil.WriteFile(descPath, []byte(*deployment.Description), 0644)
 		if err != nil {
@@ -103,7 +103,7 @@ func (c *InCommand) Run(destDir string, request InRequest) (InResponse, error) {
 
 	return InResponse{
 		Version: Version{
-			ID:       strconv.Itoa(*deployment.ID),
+			ID:       strconv.FormatInt(*deployment.ID, 10),
 			Statuses: latestStatus,
 		},
 		Metadata: metadataFromDeployment(deployment, statuses),

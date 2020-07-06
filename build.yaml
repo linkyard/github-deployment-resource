@@ -7,10 +7,10 @@ image_resource:
 
 inputs:
 - name: github-deployment-resource
-  path: gopath/src/github.com/ahume/github-deployment-resource
+  path: gopath/src/github.com/KevinSnyderCodes/github-deployment-resource
 
 outputs:
 - name: built-resource
 
 run:
-  path: gopath/src/github.com/ahume/github-deployment-resource/scripts/ci
+  path: gopath/src/github.com/KevinSnyderCodes/github-deployment-resource/scripts/ci
