@@ -66,9 +66,6 @@ func (c *DeploymentOutCommand) Run(sourceDir string, request OutRequest) (OutRes
 	if request.Params.Description != nil {
 		newDeployment.Description = request.Params.Description
 	}
-	if request.Params.AutoMerge != nil {
-		newDeployment.AutoMerge = request.Params.AutoMerge
-	}
 
 	if request.Params.AutoMerge != nil {
 		newDeployment.AutoMerge = request.Params.AutoMerge
