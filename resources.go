@@ -3,6 +3,7 @@ package resource
 import (
 	"encoding/json"
 	"io/ioutil"
+	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -58,7 +59,7 @@ type OutParams struct {
 	Task        *string
 	State       *string
 	Description *string
-	AutoMerge   *bool `json:"auto_merge"`
+	AutoMerge   *bool
 	Payload     *map[string]interface{}
 	PayloadPath *string `json:"payload_path"`
 	LogURL      *string
@@ -112,6 +113,10 @@ func (p *OutParams) UnmarshalJSON(b []byte) (err error) {
 			p.LogURL = github.String(getStringOrStringFromFile(p.RawLogURL))
 		}
 
+		if p.RawAutoMerge != nil {
+			p.AutoMerge = github.Bool(getBoolOrDefault(p.RawAutoMerge, false))
+		}
+
 		var payload map[string]interface{}
 		json.Unmarshal(p.RawPayload, &payload)
 
@@ -160,6 +165,23 @@ func getStringOrStringFromFile(field json.RawMessage) string {
 		}
 	}
 	return ""
+}
+
+func getBoolOrDefault(field json.RawMessage, defaultValue bool) bool {
+	var rawValue interface{}
+	err := json.Unmarshal(field, &rawValue)
+	if err != nil {
+		log.Printf("Error unmarshalling json: %s.\nDefaulting to given default value %t", err, defaultValue)
+		return defaultValue
+
+	}
+	switch rawValue := rawValue.(type) {
+	case bool:
+		return rawValue
+	default:
+		log.Printf("Could not parse bool from json; defaulting to false")
+		return defaultValue
+	}
 }
 
 func fileContents(path string) string {
