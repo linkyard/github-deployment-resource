@@ -79,6 +79,33 @@ var _ = Describe("Resources", func() {
 			Ω(*p.Params.AutoMerge).Should(Equal(false))
 		})
 
+		It("gets values from strings with env variable in LogURL", func() {
+			os.Setenv("FAKE_PATH", "bar")
+			r := bytes.NewReader([]byte(`{
+				"params": {
+					"type": "deployment",
+					"ref": "ref-string",
+					"state": "state-string",
+					"task": "task-string",
+					"environment": "environment-string",
+					"description": "description-string",
+					"log_url": "https://foo.com/$FAKE_PATH",
+					"auto_merge": false
+					}
+				}`))
+			err := json.NewDecoder(r).Decode(&p)
+
+			Ω(err).ShouldNot(HaveOccurred())
+			Ω(*p.Params.Type).Should(Equal("deployment"))
+			Ω(*p.Params.Ref).Should(Equal("ref-string"))
+			Ω(*p.Params.State).Should(Equal("state-string"))
+			Ω(*p.Params.Task).Should(Equal("task-string"))
+			Ω(*p.Params.Environment).Should(Equal("environment-string"))
+			Ω(*p.Params.Description).Should(Equal("description-string"))
+			Ω(*p.Params.LogURL).Should(Equal("https://foo.com/bar"))
+			Ω(*p.Params.AutoMerge).Should(Equal(false))
+		})
+
 		It("gets values from files", func() {
 			idPath := filepath.Join(sourceDir, "id")
 			refPath := filepath.Join(sourceDir, "ref")

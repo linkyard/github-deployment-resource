@@ -110,7 +110,8 @@ func (p *OutParams) UnmarshalJSON(b []byte) (err error) {
 		}
 
 		if p.RawLogURL != nil {
-			p.LogURL = github.String(getStringOrStringFromFile(p.RawLogURL))
+			logURL := os.ExpandEnv(getStringOrStringFromFile(p.RawLogURL)) // Interpolate ENV variables
+			p.LogURL = github.String(logURL)
 		}
 
 		if p.RawAutoMerge != nil {
