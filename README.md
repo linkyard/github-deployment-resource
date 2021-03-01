@@ -25,8 +25,8 @@ resource_types:
   - name: github-deployment
     type: docker-image
     source:
-      repository: andyhume/github-deployment-resource
-      tag: "v0.8.0"
+      repository: linkyard/github-deployment-resource
+      tag: "v0.3.1"
       
 resources:
   - name: deployment
