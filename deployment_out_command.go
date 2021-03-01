@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"os"
 	"strconv"
 	"strings"
 
@@ -35,16 +34,7 @@ func (c *DeploymentOutCommand) Run(sourceDir string, request OutRequest) (OutRes
 		RequiredContexts: &[]string{},
 	}
 
-	concoursePayload := map[string]interface{}{
-		"build_id":            os.Getenv("BUILD_ID"),
-		"build_name":          os.Getenv("BUILD_NAME"),
-		"build_job_name":      os.Getenv("BUILD_JOB_NAME"),
-		"build_pipeline_name": os.Getenv("BUILD_PIPELINE_NAME"),
-		"build_team_name":     os.Getenv("BUILD_TEAM_NAME"),
-		"build_url": fmt.Sprintf("%v/teams/%v/pipelines/%v/jobs/%v/builds/%v",
-			os.Getenv("ATC_EXTERNAL_URL"), os.Getenv("BUILD_TEAM_NAME"), os.Getenv("BUILD_PIPELINE_NAME"), os.Getenv("BUILD_JOB_NAME"), os.Getenv("BUILD_NAME")),
-		"atc_external_url": os.Getenv("ATC_EXTERNAL_URL"),
-	}
+	concoursePayload := GetConcourseMetadata()
 
 	if request.Params.Payload != nil && *request.Params.Payload != nil {
 		payload := *request.Params.Payload

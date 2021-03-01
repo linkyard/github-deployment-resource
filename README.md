@@ -92,6 +92,8 @@ Create a new Deployment, or update a given Deployment with a new DeploymentStatu
 
 * `description`: *Optional.* The description of the deployment.
 
+* `environment_url`: *Optional.* URL of the deployment
+
 * `auto_merge`: *Optional.* Whether to auto-merge the repository's default branch into the deployment ref. Defaults to true.
 
 * `payload`: *Optional.* Additional data about the deployment.
@@ -102,6 +104,8 @@ NB: If there are duplicate keys in data from `payload` and `payload_path`, then 
 `payload_path` takes precedence.
 
 * `task`: *Optional.* The name of the task for the deployment.
+
+The log url is automatically set to the url of the concourse build.
 
 ##### Reading values from files
 

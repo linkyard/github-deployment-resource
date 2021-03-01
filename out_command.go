@@ -41,9 +41,12 @@ func (c *OutCommand) Run(sourceDir string, request OutRequest) (OutResponse, err
 		return OutResponse{}, err
 	}
 
+	concourseMetadata := GetConcourseMetadata()
 	newStatus := &github.DeploymentStatusRequest{
-		State:       request.Params.State,
-		Description: request.Params.Description,
+		State:          request.Params.State,
+		Description:    request.Params.Description,
+		LogURL:         &concourseMetadata.BuildURL,
+		EnvironmentURL: request.Params.EnvironmentURL,
 	}
 
 	if request.Params.LogURL != nil && *request.Params.LogURL != "" {
