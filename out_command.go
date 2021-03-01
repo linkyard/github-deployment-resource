@@ -49,10 +49,6 @@ func (c *OutCommand) Run(sourceDir string, request OutRequest) (OutResponse, err
 		EnvironmentURL: request.Params.EnvironmentURL,
 	}
 
-	if request.Params.LogURL != nil && *request.Params.LogURL != "" {
-		newStatus.LogURL = request.Params.LogURL
-	}
-
 	fmt.Fprintln(c.writer, "creating deployment status")
 	_, err = c.github.CreateDeploymentStatus(*deployment.ID, newStatus)
 	if err != nil {

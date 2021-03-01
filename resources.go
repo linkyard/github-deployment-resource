@@ -63,17 +63,18 @@ type OutParams struct {
 	Payload        *map[string]interface{}
 	PayloadPath    *string `json:"payload_path"`
 	LogURL         *string
-	EnvironmentURL *string `json:"environment_url,omitempty"`
+	EnvironmentURL *string
 
-	RawID          json.RawMessage `json:"id"`
-	RawState       json.RawMessage `json:"state"`
-	RawRef         json.RawMessage `json:"ref"`
-	RawTask        json.RawMessage `json:"task"`
-	RawEnvironment json.RawMessage `json:"environment"`
-	RawDescription json.RawMessage `json:"description"`
-	RawAutoMerge   json.RawMessage `json:"auto_merge"`
-	RawPayload     json.RawMessage `json:"payload"`
-	RawLogURL      json.RawMessage `json:"log_url"`
+	RawID             json.RawMessage `json:"id"`
+	RawState          json.RawMessage `json:"state"`
+	RawRef            json.RawMessage `json:"ref"`
+	RawTask           json.RawMessage `json:"task"`
+	RawEnvironment    json.RawMessage `json:"environment"`
+	RawEnvironmentURL json.RawMessage `json:"environment_url"`
+	RawDescription    json.RawMessage `json:"description"`
+	RawAutoMerge      json.RawMessage `json:"auto_merge"`
+	RawPayload        json.RawMessage `json:"payload"`
+	RawLogURL         json.RawMessage `json:"log_url"`
 }
 
 // Used to avoid recursion in UnmarshalJSON below.
@@ -104,6 +105,11 @@ func (p *OutParams) UnmarshalJSON(b []byte) (err error) {
 
 		if p.RawEnvironment != nil {
 			p.Environment = github.String(getStringOrStringFromFile(p.RawEnvironment))
+		}
+
+		if p.RawEnvironmentURL != nil {
+			envUrl := os.ExpandEnv(getStringOrStringFromFile(p.RawEnvironmentURL)) // Interpolate ENV variables
+			p.EnvironmentURL = github.String(envUrl)
 		}
 
 		if p.RawDescription != nil {
