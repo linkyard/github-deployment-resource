@@ -1,4 +1,4 @@
-module github.com/KevinSnyderCodes/github-deployment-resource
+module github.com/linkyard/github-deployment-resource
 
 go 1.13
 

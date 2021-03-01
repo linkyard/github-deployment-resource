@@ -4,7 +4,7 @@ package fakes
 import (
 	"sync"
 
-	resource "github.com/KevinSnyderCodes/github-deployment-resource"
+	resource "github.com/linkyard/github-deployment-resource"
 	"github.com/shipt/go-github/v32/github"
 )
 

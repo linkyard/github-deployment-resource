@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"os"
 
-	resource "github.com/KevinSnyderCodes/github-deployment-resource"
+	resource "github.com/linkyard/github-deployment-resource"
 )
 
 func main() {

@@ -8,8 +8,8 @@ import (
 
 	"github.com/shipt/go-github/v32/github"
 
-	resource "github.com/KevinSnyderCodes/github-deployment-resource"
-	"github.com/KevinSnyderCodes/github-deployment-resource/fakes"
+	resource "github.com/linkyard/github-deployment-resource"
+	"github.com/linkyard/github-deployment-resource/fakes"
 )
 
 var _ = Describe("Check Command", func() {
